@@ -330,6 +330,25 @@ abstract class BaseFacebook
   }
 
   /**
+   * Sets the new access token persistently and refreshes user's cache,
+   * so even after refresh, 
+   * the given access token still persists.
+   * Use it if you need 
+   * to set accesss token which has been taken from database,
+   * for example
+   *
+   * @param string $access_token an access token
+   * @return BaseFacebook
+   */
+  public function setPersistentAccessToken($access_token) {
+    $this->accessToken = $access_token;
+    $this->user = $this->getUserFromAccessToken();
+    $this->setPersistentData('access_token', $access_token);
+    $this->setPersistentData('user_id', $this->user);
+    return $this;
+  }
+
+  /**
    * Determines the access token that should be used for API calls.
    * The first time this is called, $this->accessToken is set equal
    * to either a valid user access token, or it's set to the application
